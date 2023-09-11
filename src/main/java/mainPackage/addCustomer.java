@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -30,6 +31,8 @@ public class addCustomer extends JInternalFrame {
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JLabel txtId = new JLabel("New label");
+	private JFormattedTextField formattedTextField = new JFormattedTextField();
+	private JRadioButton rdbtnNewRadioButton;
 
 	Connection con;
 	PreparedStatement ps;
@@ -113,7 +116,6 @@ public class addCustomer extends JInternalFrame {
 		textField_3.setBounds(108, 128, 118, 20);
 		panel.add(textField_3);
 
-		JFormattedTextField formattedTextField = new JFormattedTextField();
 		formattedTextField.setBounds(108, 154, 118, 44);
 		panel.add(formattedTextField);
 
@@ -135,7 +137,7 @@ public class addCustomer extends JInternalFrame {
 		lblNewLabel_7.setBounds(236, 100, 63, 14);
 		panel.add(lblNewLabel_7);
 
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Male");
+		rdbtnNewRadioButton = new JRadioButton("Male");
 		buttonGroup.add(rdbtnNewRadioButton);
 		rdbtnNewRadioButton.setBounds(334, 62, 47, 23);
 		panel.add(rdbtnNewRadioButton);
@@ -154,13 +156,18 @@ public class addCustomer extends JInternalFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addingCustomerId();
-
+				fetchingValues();
 			}
 		});
 		btnNewButton.setBounds(236, 121, 104, 35);
 		panel.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Cancel");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btnNewButton_1.setBounds(345, 121, 113, 35);
 		panel.add(btnNewButton_1);
 
@@ -192,14 +199,13 @@ public class addCustomer extends JInternalFrame {
 			rs.next();
 			rs.getString("MAX(id)");
 			if (rs.getString("MAX(id)") == null) {
-				txtId.setText ("CID001");
-			}
-			else {
-				long id = Long.parseLong(rs.getString("MAX(id)").substring(2,rs.getString("MAX(id)").length()));
+				txtId.setText("CID001");
+			} else {
+				long id = Long.parseLong(rs.getString("MAX(id)").substring(3, rs.getString("MAX(id)").length()));
 				id++;
-				txtId.setText("CID"+String.format("%03d",id));
+				txtId.setText("CID" + String.format("%03d", id));
 			}
- 
+
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -207,6 +213,51 @@ public class addCustomer extends JInternalFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void fetchingValues() {
+		String id = txtId.getText();
+		String firstName = textField.getText();
+		String lastName = textField_1.getText();
+		String nicNumber = textField_2.getText();
+		String passportId = textField_3.getText();
+		String address = formattedTextField.getText();
+		String dob = textField_5.getText();
+
+		String gender;
+		if (rdbtnNewRadioButton.isSelected()) {
+			gender = "Male";
+		} else {
+			gender = "Female";
+		}
+		String contactNumber = textField_4.getText();
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "");
+			ps = con.prepareStatement(
+					"insert into customer(id,firstName,lastName,nic,passportid,address,dob,gender,contact)values(?,?,?,?,?,?,?,?,?)");
+			ps.setString(1, id);
+			ps.setString(2, firstName);
+			ps.setString(3, lastName);
+			ps.setString(4, nicNumber);
+			ps.setString(5, passportId);
+			ps.setString(6, address);
+			ps.setString(7, dob);
+			ps.setString(8, gender);
+			ps.setString(9, contactNumber);
+			ps.executeUpdate();
+
+			JOptionPane.showMessageDialog(null, "Registration created! ");
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }
