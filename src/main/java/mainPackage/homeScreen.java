@@ -56,6 +56,13 @@ public class homeScreen extends JFrame {
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Search Customer");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SearchCustomer searchCustomer = new SearchCustomer();
+				searchCustomer.setVisible(true);
+				contentPane.add(searchCustomer);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
 		JMenu mnNewMenu_1 = new JMenu("Tickets");
