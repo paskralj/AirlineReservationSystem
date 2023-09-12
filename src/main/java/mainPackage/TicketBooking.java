@@ -18,10 +18,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
 
 public class TicketBooking extends JInternalFrame {
 	private JTable table;
@@ -30,6 +32,9 @@ public class TicketBooking extends JInternalFrame {
 
 	Connection con;
 	PreparedStatement ps;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -107,24 +112,72 @@ public class TicketBooking extends JInternalFrame {
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "FlightID", "FlightName", "Departure",
 				"Destination", "Date", "ArrivalTime", "DepartureTime", "Price" }));
-		
+
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.ORANGE);
 		panel_1.setBounds(403, 11, 177, 139);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(null);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Ticket number:");
 		lblNewLabel_3.setForeground(Color.MAGENTA);
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_3.setBounds(31, 11, 109, 36);
 		panel_1.add(lblNewLabel_3);
-		
+
 		JLabel lblNewLabel_4 = new JLabel("Ticket NO");
 		lblNewLabel_4.setForeground(Color.BLUE);
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNewLabel_4.setBounds(41, 58, 99, 48);
 		panel_1.add(lblNewLabel_4);
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(Color.ORANGE);
+		panel_2.setBounds(620, 11, 395, 139);
+		getContentPane().add(panel_2);
+		panel_2.setLayout(null);
+
+		JLabel lblNewLabel_5 = new JLabel("Customer ID:");
+		lblNewLabel_5.setForeground(Color.MAGENTA);
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_5.setBounds(10, 11, 103, 25);
+		panel_2.add(lblNewLabel_5);
+
+		JLabel lblNewLabel_6 = new JLabel("First name:");
+		lblNewLabel_6.setForeground(Color.MAGENTA);
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_6.setBounds(10, 47, 92, 29);
+		panel_2.add(lblNewLabel_6);
+
+		JLabel lblNewLabel_7 = new JLabel("Last name:");
+		lblNewLabel_7.setForeground(Color.MAGENTA);
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_7.setBounds(10, 87, 92, 25);
+		panel_2.add(lblNewLabel_7);
+
+		textField = new JTextField();
+		textField.setBounds(123, 15, 103, 20);
+		panel_2.add(textField);
+		textField.setColumns(10);
+
+		JButton btnNewButton_1 = new JButton("Search");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getUsersFnameLname();
+			}
+		});
+		btnNewButton_1.setBounds(248, 14, 89, 23);
+		panel_2.add(btnNewButton_1);
+
+		textField_1 = new JTextField();
+		textField_1.setBounds(123, 53, 137, 20);
+		panel_2.add(textField_1);
+		textField_1.setColumns(10);
+
+		textField_2 = new JTextField();
+		textField_2.setBounds(123, 91, 137, 20);
+		panel_2.add(textField_2);
+		textField_2.setColumns(10);
 
 	}
 
@@ -161,6 +214,33 @@ public class TicketBooking extends JInternalFrame {
 				}
 				df.addRow(vec);
 			}
+
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void getUsersFnameLname() {
+		String id = textField.getText();
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "");
+			ps = con.prepareStatement("select * from customer where id = ?");
+			ps.setString(1, id);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next() == false) {
+				JOptionPane.showMessageDialog(this, "record not found");
+			} else {
+				String firstName = rs.getString("firstname");
+				String lastName = rs.getString("lastname");
+				textField_1.setText(firstName);
+				textField_2.setText(lastName);
+			}	
 
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
