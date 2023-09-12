@@ -75,13 +75,13 @@ public class AddFlight extends JInternalFrame {
 		lblNewLabel_1.setBounds(10, 53, 95, 33);
 		panel.add(lblNewLabel_1);
 
-		JLabel lblNewLabel_2 = new JLabel("Arrivals");
+		JLabel lblNewLabel_2 = new JLabel("Departure");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_2.setForeground(Color.MAGENTA);
 		lblNewLabel_2.setBounds(10, 97, 83, 34);
 		panel.add(lblNewLabel_2);
 
-		JLabel lblNewLabel_3 = new JLabel("Departure");
+		JLabel lblNewLabel_3 = new JLabel("Destination");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_3.setForeground(Color.MAGENTA);
 		lblNewLabel_3.setBounds(10, 142, 83, 31);
@@ -204,8 +204,8 @@ public class AddFlight extends JInternalFrame {
 	public void fetchingValues() {
 		String id = lblNewLabel_8.getText();
 		String flightName = textField.getText();
-		String arrivals = comboBox.getSelectedItem().toString();
-		String departure = comboBox_1.getSelectedItem().toString();
+		String departure = comboBox.getSelectedItem().toString().trim();
+		String destination = comboBox_1.getSelectedItem().toString().trim();
 		String date = textField_1.getText();
 		String arrivalTime = textField_2.getText();
 		String departureTime= textField_3.getText();
@@ -215,11 +215,11 @@ public class AddFlight extends JInternalFrame {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost/airline", "root", "");
 			ps = con.prepareStatement(
-					"insert into flight (id,flightname,arrivals,departure,date,arrivaltime,departuretime,price)values(?,?,?,?,?,?,?,?)");
+					"insert into flight (id,flightname,departure,destination,date,arrivaltime,departuretime,price)values(?,?,?,?,?,?,?,?)");
 			ps.setString(1, id);
 			ps.setString(2, flightName);
-			ps.setString(3, arrivals);
-			ps.setString(4, departure);
+			ps.setString(3, departure);
+			ps.setString(4, destination);
 			ps.setString(5, date);
 			ps.setString(6, arrivalTime);
 			ps.setString(7, departureTime);
