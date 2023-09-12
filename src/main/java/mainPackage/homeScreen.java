@@ -37,7 +37,7 @@ public class homeScreen extends JFrame {
 	 */
 	public homeScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 1400, 900);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -69,9 +69,23 @@ public class homeScreen extends JFrame {
 		menuBar.add(mnNewMenu_1);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Add Flight");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddFlight addFlight = new AddFlight();
+				addFlight.setVisible(true);
+				contentPane.add(addFlight);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_2);
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Ticket Booking");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TicketBooking ticketBooking = new TicketBooking();
+				ticketBooking.setVisible(true);
+				contentPane.add(ticketBooking);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Ticket Report");
