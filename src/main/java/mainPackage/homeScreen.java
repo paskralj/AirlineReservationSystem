@@ -89,6 +89,13 @@ public class homeScreen extends JFrame {
 		mnNewMenu_1.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Ticket Report");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TicketReport ticketReport = new TicketReport();
+				ticketReport.setVisible(true);
+				contentPane.add(ticketReport);
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_4);
 		
 		JMenu mnNewMenu_2 = new JMenu("User");
